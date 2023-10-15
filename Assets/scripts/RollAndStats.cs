@@ -1,19 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RollAndStats : MonoBehaviour
 {
     [SerializeField] GameObject _player;
 
-
     public int _Dice;
+    public Image _DiceImage;
+    public Image _TypeImg;
+    public GameObject[] _type;
     public List<int> _diceEye;
     int _point = 0;
-    int _rollCount = 0;
-    
-    int _currentRounds = 0;
-
+    bool _RollReady = true;
+    int _chooseCount = 0;
 
     int _Ad = 2;
     int _Hp = 50;
@@ -23,89 +24,155 @@ public class RollAndStats : MonoBehaviour
     public int HP { get { return _Hp; } set { _Hp = value; } }
     public float AS { get { return _As; } set { _As = value; } }
 
-    int _AdPoint;
-    int _HpPoint;
-    int _AsPoint;
+    PointType _PointType;
 
     void Start()
     {
         _diceEye = new List<int> { 1, 2, 3, 4, 5, 6 };
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        
         RollDice();
+        Check();
+        AddStat();
     }
 
     void RollDice()
     {
-        if (GameObject.Find("Portals").GetComponent<Portal>()._rounds > _currentRounds)
+        if (Input.GetKeyDown(KeyCode.R) && _RollReady == true)
         {
-            Time.timeScale = 0;
-        }
-        if (Input.GetKeyDown(KeyCode.R) && _rollCount == 0)
-        {
-            _rollCount++;
+            _RollReady = false;
             _Dice = _diceEye[Random.Range(0, _diceEye.Count)];
             _point = _Dice;
             Debug.Log(_point);
+            StartCoroutine(CoolTime(10f));
+        }
 
+        IEnumerator CoolTime(float cool)
+        {
+            while (cool > 1.0f)
+            {
+                cool -= Time.deltaTime;
+                _DiceImage.fillAmount = (1.0f /  cool);
+                yield return new WaitForFixedUpdate();
+            }
+
+            _RollReady = true;  
+        }
+    }
+
+    void Check()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            GameObject Attack = _type[0];
+            GameObject Health = _type[1];
+            GameObject AttackSpd = _type[2];
+            _chooseCount++;
+            if (_chooseCount == 1)
+            {
+                _PointType = PointType.AD;
+                Instantiate(Attack);
+                Debug.Log(_PointType);
+            }
+            else if (_chooseCount == 2)
+            {
+                _PointType = PointType.HP;
+                Destroy(Attack);
+                Instantiate(Health);
+                Debug.Log(_PointType);
+            }
+            else if (_chooseCount == 3)
+            {
+                _PointType = PointType.AS;
+                Destroy(Health); 
+                Instantiate(AttackSpd);
+                Debug.Log(_PointType);
+                _chooseCount = 0;
+            }
+        }
+    }
+
+    void AddStat()
+    {
+        switch (_PointType) 
+        {
+            case PointType.AD:
+                {
+                    GetPointAD(); break;    
+                }
+            case PointType.HP:
+                {
+                    GetPointHP(); break;
+                }
+            case PointType.AS:
+                {
+                    GetPointAS(); break;    
+                }
         }
 
 
     }
-
-    // 끝나면 버튼 사라지는거 구현해야함
     public void GetPointAD()
     {
-        if(_point > 0) 
+        if (_PointType == PointType.AD && Input.GetKeyDown(KeyCode.Q))
         {
-            _Ad += 2;
-            _point--;
-            Debug.Log(_Ad);
+            if(_point > 0)
+            {
+                _Ad += 2;
+                _point--;
+                Debug.Log(_Ad);
+            }
+            else if(_point < 0) 
+            {
+                Debug.Log("오류입니다.");
+            }
             
+        }
 
-        }
-        else if (_point <= 0)
-        {
-            _currentRounds++;
-            _rollCount = 0;
-            Time.timeScale = 1;
-        }
     }
 
     public void GetPointHP()
     {
-        if(_point > 0)
+        if (_PointType == PointType.HP && Input.GetKeyDown(KeyCode.Q))
         {
-            _Hp += 5;
-            _point--;
-            Debug.Log(_Hp); 
+            if(_point >0)
+            {
+                _Hp += 5;
+                _point--;
+                Debug.Log(_Hp);
+            }
         }
-        else if (_point <= 0)
+        else if (_point < 0)
         {
-            _currentRounds++;
-            _rollCount = 0;
-            Time.timeScale = 1;
+            Debug.Log("오류입니다.");
         }
     }
 
     public void GetPointAS()
     {
-        if( _point > 0)
+        if (_PointType == PointType.AS && Input.GetKeyDown(KeyCode.Q))
         {
-            _As -= 0.2f;
-            _point--;
-            Debug.Log(_As);
-        }
-       else if (_point <= 0)
+            if(_point> 0)
+            {
+                _As -= 0.2f;
+                _point--;
+                Debug.Log(_As);
+            }
+        } 
+        else if (_point < 0)
         {
-            _currentRounds++;
-            _rollCount = 0;
-            Time.timeScale = 1;
+            Debug.Log("오류입니다.");
         }
+
+    }
+
+    public enum PointType
+    { 
+        AD,
+        HP,
+        AS
     }
 }

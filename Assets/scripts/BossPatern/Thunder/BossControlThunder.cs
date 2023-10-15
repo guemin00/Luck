@@ -24,9 +24,17 @@ public class BossControlThunder : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.B))
+        if(Input.GetKeyDown(KeyCode.B) && _nextPatern == 0)
         {
             InvokeRepeating("Thunder", 0, 1f);
+        }
+        if(Input.GetKeyDown(KeyCode.B) && _nextPatern == 1) 
+        {
+            ThunderMove();
+        }
+        if (Input.GetKeyDown(KeyCode.B) && _nextPatern == 2)
+        {
+            ThunderShoot();
         }
     }
 
@@ -45,6 +53,53 @@ public class BossControlThunder : MonoBehaviour
             yield return new WaitForSeconds(0.3f);
             GameObject thunder = Instantiate(_skills[0]);
             Destroy(thunder, 0.5f);
+        }
+    }
+
+
+    void ThunderMove()
+    {
+        _dangerBox[1].transform.position = _bossPos.position;
+        _skills[1].transform.position = new Vector3(190, _bossPos.position.y, _bossPos.position.z);
+        GameObject danger = Instantiate(_dangerBox[1]);
+        danger.GetComponent<Animator>().Play("DangerBox");
+        Destroy(danger, 0.5f);
+        StartCoroutine(light());
+        
+        IEnumerator light()
+        {
+            yield return new WaitForSeconds(0.5f);
+            GameObject thunder = Instantiate(_skills[1]);
+            thunder.GetComponent<Animator>().Play("ThunderMove");
+            Destroy(thunder, 5f);
+        }
+    }
+
+
+
+    void ThunderShoot()
+    {
+        _dangerBox[2].transform.position = new Vector3(_bossPos.position.x, _playerPos.position.y, 0);
+        _skills[2].transform.position = new Vector3(_dangerBox[2].transform.position.x + 20, _dangerBox[2].transform.position.y);
+        _skills[3].transform.position = new Vector3(_dangerBox[2].transform.position.x - 20, _dangerBox[2].transform.position.y);
+        GameObject danger = Instantiate(_dangerBox[2]);
+        danger.GetComponent<Animator>().Play("DangerBox");
+        Destroy(danger, 0.3f);
+        StartCoroutine(light());
+           
+        IEnumerator light()
+        {
+            yield return new WaitForSeconds(0.2f);
+            GameObject thunder = Instantiate(_skills[2]);
+            //thunder.transform.position = new Vector3( danger.transform.position.x + 20, danger.transform.position.y);
+            StartCoroutine(light2());
+            Debug.Log("½ÇÇà");
+        }
+        
+        IEnumerator light2()
+        {
+            yield return new WaitForSeconds(1f);
+            GameObject thunder2 = Instantiate(_skills[3]);
         }
     }
 }

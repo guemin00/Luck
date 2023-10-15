@@ -6,26 +6,12 @@ public class DiceRoll : MonoBehaviour
 {
 
     PlayerControl playerControl;
-    //EnemyControl enemyControl;
-
-   
-
 
     public int _Dice;
     public List<int> _diceEye;
     int _rollCount = 0;
     int _diceDamage = 0;
     int _saveDice = 0;
-
-    /*
-    public int _enemyDice;
-    public List<int> _enemyDiceEye;
-   public int _enemyDiceDamage= 0;
-    int _saveDiceEnemy = 0;
-    int _enemyRoll = 0;
-    */
-
-
 
     private void Start()
     {
@@ -49,11 +35,8 @@ public class DiceRoll : MonoBehaviour
 
    public void RollDice()
     {
-       
-
         if (Input.GetKeyDown(KeyCode.R))
         {
-           
             _Dice = _diceEye[Random.Range(0, _diceEye.Count)]; 
             _diceDamage = _Dice;
             _saveDice = _Dice;
@@ -72,41 +55,4 @@ public class DiceRoll : MonoBehaviour
             }
         }
     }
-
-    /*
-    public void EnemyRollDice()
-    {
-        // 생각해보니 초기화 할 필요 x
-        if(Input.GetKeyDown(KeyCode.R))
-        {
-            _enemyDice = _enemyDiceEye[Random.Range(0, _enemyDiceEye.Count)];
-            _enemyDiceDamage = _enemyDice;
-            _saveDiceEnemy = _enemyDice;
-            GameObject[] enemys = GameObject.FindGameObjectsWithTag("Enemy");
-            foreach(var enemy in enemys)
-            {
-                if(enemy.GetComponent<EnemyControl>() != null)
-                    enemy.GetComponent<EnemyControl>()._eAD += _enemyDiceDamage;
-
-            }
-            _enemyRoll++;
-            Debug.Log(_enemyDice);
-            if(_enemyRoll > 1)
-            {
-                foreach (var enemy in enemys)
-                {
-                    if (enemy.GetComponent<EnemyControl>() != null)
-                        enemy.GetComponent<EnemyControl>()._eAD -= _saveDiceEnemy;
-
-                }
-                //enemyControl._eAD -= _saveDiceEnemy;
-                _enemyDice = 0;
-                _enemyDiceDamage = 0;
-                _saveDiceEnemy = 0;
-                _enemyRoll = 0;
-            }
-        }
-    }
-    */
-
 }

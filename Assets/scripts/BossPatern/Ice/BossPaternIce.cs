@@ -50,9 +50,6 @@ public class BossPaternIce : MonoBehaviour
         
     }
 
-    
-
-
     void IceCylinder()
     {
         if(_nextPatern == 0)
@@ -156,14 +153,4 @@ public class BossPaternIce : MonoBehaviour
         }
         while (_count < 5); 
     }
-
-
-    void IceGuard()
-    {
-        _skills[4].gameObject.transform.position = _bossPos.position;
-        GameObject temp = Instantiate(_skills[3]);
-        temp.GetComponent<Animator>().Play("IceGuard");
-    }
-
-    
 }
