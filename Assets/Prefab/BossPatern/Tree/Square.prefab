@@ -110,7 +110,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3738939006058670369}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 112.7, y: 133.7, z: 0}
+  m_LocalPosition: {x: 116.7, y: 133.7, z: 0}
   m_LocalScale: {x: 0.5, y: 3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -181,6 +181,7 @@ GameObject:
   - component: {fileID: 1179699898273873263}
   - component: {fileID: 1191153349975280586}
   - component: {fileID: 5618903578610852802}
+  - component: {fileID: 6640479860379255084}
   m_Layer: 0
   m_Name: Particle System
   m_TagString: Untagged
@@ -3840,10 +3841,10 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     range: {x: 0, y: 1}
   CollisionModule:
-    enabled: 0
+    enabled: 1
     serializedVersion: 4
-    type: 0
-    collisionMode: 0
+    type: 1
+    collisionMode: 1
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
@@ -4017,7 +4018,7 @@ ParticleSystem:
     maxCollisionShapes: 256
     quality: 0
     voxelSize: 0.5
-    collisionMessages: 0
+    collisionMessages: 1
     collidesWithDynamic: 1
     interiorCollisions: 0
   TriggerModule:
@@ -4025,7 +4026,7 @@ ParticleSystem:
     serializedVersion: 2
     inside: 1
     outside: 0
-    enter: 0
+    enter: 1
     exit: 0
     colliderQueryMode: 0
     radiusScale: 1
@@ -5040,3 +5041,15 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &6640479860379255084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7807565718000659648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fee9a02e90ec0cf4090f86c6aef02929, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

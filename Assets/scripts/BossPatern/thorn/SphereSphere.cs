@@ -25,4 +25,13 @@ public class SphereSphere : MonoBehaviour
         rb.AddForce(dir*_speed);
         
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.collider.tag == "Player")
+        {
+            RollAndStats.instance.HP -= 10;
+            Debug.Log(RollAndStats.instance.HP);
+        }
+    }
 }

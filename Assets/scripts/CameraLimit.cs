@@ -4,48 +4,70 @@ using UnityEngine;
 
 public class CameraLimit : MonoBehaviour
 {
+    [SerializeField]
+    Transform playerTransform;
+    [SerializeField]
+    Vector3 cameraPosition;
 
-    public Transform _target;
-    public float _speed;
+    [SerializeField]
+    Vector2 center;
+    [SerializeField]
+    Vector2 mapSize;
 
-    Transform _cameraLimit;
+    [SerializeField]
+    float cameraMoveSpeed;
+    float height;
+    float width;
 
-    public Transform[] Limit;
+    [SerializeField]
+    GameObject[] _maps;
+    int _mapIndex;
+    public int nextMap { get { return _mapIndex; } set { _mapIndex = value; } }
 
-    Vector3 _cameraPosition = new Vector3(0, 0, -10);
-
-
-
-    float _height;
-    float _width;
-
-  
-
-
-    // Start is called before the first frame update
+    public static CameraLimit instance;
+    private void Awake()
+    {
+        instance = this;
+    }
     void Start()
     {
-        _height = Camera.main.orthographicSize;
-        _width = _height*Screen.width/Screen.height;
-        ChangeLimit(0);
+        playerTransform = GameObject.Find("Player").GetComponent<Transform>();
+        center = _maps[0].transform.position;
+        height = Camera.main.orthographicSize;
+        width = height * Screen.width / Screen.height;
     }
 
-    public void ChangeLimit(int x)
+    private void Update()
     {
-        _cameraLimit = Limit[x];
+        center = _maps[nextMap].transform.position;
     }
 
-
-    // Update is called once per frame
-    void LateUpdate()
+    void FixedUpdate()
     {
-        transform.position =Vector3.MoveTowards(transform.position, _target.position, Time.deltaTime*_speed );
-        float lx = _cameraLimit.localScale.x*0.5f - _width;
-        float clampX = Mathf.Clamp(transform.position.x, -lx+_cameraLimit.position.x, lx+_cameraLimit.position.x);
+        LimitCameraArea();
+    }
 
-        float ly = _cameraLimit.localScale.y * 0.5f - _height;
-        float clampY = Mathf.Clamp(transform.position.y, -ly+_cameraLimit.position.y, ly+_cameraLimit.position.y);
+    void LimitCameraArea()
+    {
+        transform.position = Vector3.Lerp(transform.position,
+                                          playerTransform.position + cameraPosition,
+                                          Time.deltaTime * cameraMoveSpeed);
+        float lx = mapSize.x - width;
+        float clampX = Mathf.Clamp(transform.position.x, -lx + center.x, lx + center.x);
 
-        transform.position = new Vector3(clampX, clampY, -10f );
+        float ly = mapSize.y - height;
+        float clampY = Mathf.Clamp(transform.position.y, -ly + center.y, ly + center.y);
+
+        transform.position = new Vector3(clampX, clampY, -10f);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(center, mapSize * 2);
     }
 }
+
+
+
+

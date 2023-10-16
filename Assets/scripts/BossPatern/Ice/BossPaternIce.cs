@@ -10,13 +10,11 @@ public class BossPaternIce : MonoBehaviour
     [SerializeField] GameObject[] _dangerBox;
     [SerializeField] GameObject _boss;
     [SerializeField] GameObject _player;
-    
+
     Transform _playerPos;
     Transform _bossPos;
     float _skillTime = 0f;
     int _count = 0;
-
-
     int _nextPatern;
 
     private void Start()

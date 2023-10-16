@@ -10,30 +10,69 @@ public class Portal : MonoBehaviour
 
     public int _rounds;
     bool _clear = true;
-    Vector2 _dis;
 
     private void Start()
     {
         _rounds = 0;
-
+        CameraLimit.instance.nextMap = 0;
     }
 
     private void Update()
     {
         Teleport();
-    }
+        TeleIce();
+        TeleSpear();
+        TeleThunder();
+        TeleTree();
+    }  
 
     void Teleport()
     {
-        if (Vector2.Distance(_player.transform.position, _portal[_rounds].transform.position) < 2f && Input.GetKeyDown(KeyCode.V))
+        if (Vector2.Distance(_player.transform.position, _portal[0].transform.position) < 2f && Input.GetKeyDown(KeyCode.V))
         {
-            if(_clear == true)
-            {
-                _player.transform.position = _spawn[_rounds].transform.position;
+                _player.transform.position = _spawn[0].transform.position;
                 _rounds++;
-                _clear = false;
-            }
-            
+                CameraLimit.instance.nextMap= 1;
+        }
+    }
+
+    void TeleIce()
+    {
+        if (Vector2.Distance(_player.transform.position, _portal[1].transform.position) < 2f && Input.GetKeyDown(KeyCode.V))
+        {
+            _player.transform.position = _spawn[1].transform.position;
+            _rounds++;
+            CameraLimit.instance.nextMap = 2;
+        }
+    }
+
+    void TeleSpear()
+    {
+        if (Vector2.Distance(_player.transform.position, _portal[2].transform.position) < 2f && Input.GetKeyDown(KeyCode.V))
+        {
+            _player.transform.position = _spawn[2].transform.position;
+            _rounds++;
+            CameraLimit.instance.nextMap = 3;
+        }
+    }
+
+    void TeleTree()
+    {
+        if (Vector2.Distance(_player.transform.position, _portal[3].transform.position) < 2f && Input.GetKeyDown(KeyCode.V))
+        {
+            _player.transform.position = _spawn[3].transform.position;
+            _rounds++;
+            CameraLimit.instance.nextMap = 4;
+        }
+    }
+
+    void TeleThunder()
+    {
+        if (Vector2.Distance(_player.transform.position, _portal[4].transform.position) < 2f && Input.GetKeyDown(KeyCode.V))
+        {
+            _player.transform.position = _spawn[4].transform.position;
+            _rounds++;
+            CameraLimit.instance.nextMap = 5;
         }
     }
 

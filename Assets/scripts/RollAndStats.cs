@@ -7,10 +7,12 @@ public class RollAndStats : MonoBehaviour
 {
     [SerializeField] GameObject _player;
 
+    public static RollAndStats instance;
+
     public int _Dice;
     public Image _DiceImage;
     public Image _TypeImg;
-    public GameObject[] _type;
+    public Sprite[] _type;
     public List<int> _diceEye;
     int _point = 0;
     bool _RollReady = true;
@@ -26,6 +28,11 @@ public class RollAndStats : MonoBehaviour
 
     PointType _PointType;
 
+    private void Awake()
+    {
+        instance = this;
+    }
+
     void Start()
     {
         _diceEye = new List<int> { 1, 2, 3, 4, 5, 6 };
@@ -37,6 +44,10 @@ public class RollAndStats : MonoBehaviour
         RollDice();
         Check();
         AddStat();
+        if(HP <= 0)
+        {
+            _player.SetActive(false);
+        }
     }
 
     void RollDice()
@@ -67,28 +78,28 @@ public class RollAndStats : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1))
         {
-            GameObject Attack = _type[0];
-            GameObject Health = _type[1];
-            GameObject AttackSpd = _type[2];
+            Sprite Attack = _type[0];
+            Sprite Health = _type[1];
+            Sprite AttackSpd = _type[2];
             _chooseCount++;
             if (_chooseCount == 1)
             {
                 _PointType = PointType.AD;
-                Instantiate(Attack);
+                _TypeImg.sprite = Attack;
                 Debug.Log(_PointType);
             }
             else if (_chooseCount == 2)
             {
                 _PointType = PointType.HP;
                 Destroy(Attack);
-                Instantiate(Health);
+                _TypeImg.sprite = Health;
                 Debug.Log(_PointType);
             }
             else if (_chooseCount == 3)
             {
                 _PointType = PointType.AS;
                 Destroy(Health); 
-                Instantiate(AttackSpd);
+                _TypeImg.sprite = AttackSpd;
                 Debug.Log(_PointType);
                 _chooseCount = 0;
             }

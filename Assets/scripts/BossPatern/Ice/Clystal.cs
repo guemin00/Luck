@@ -8,9 +8,11 @@ public class Clystal : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            PlayerControl.Instance._dmg = 5;
-            PlayerControl.Instance.Dmg();
-            Debug.Log(PlayerControl.Instance.GetHp);
+            if (collision.collider.tag == "Player")
+            {
+                RollAndStats.instance.HP -= 3;
+                Debug.Log(RollAndStats.instance.HP);
+            }
         }
     }
 

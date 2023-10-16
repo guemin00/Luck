@@ -10,37 +10,86 @@ public class BossPaternThorn : MonoBehaviour
     [SerializeField] GameObject _boss;
     [SerializeField] GameObject _player;
 
+    public static BossPaternThorn instance;
     Transform _playerPos;
     Transform _bossPos;
     int _nextPatern;
     int _count = 0;
     float i = 0;
     bool finish = false;
+    float _Hp;
+    public float HP { get { return _Hp; } set { _Hp = value; } }
 
+    float BiteCool;
+    float SphereCool;
+    float GroundCool;
+
+    bool BiteReady = false;
+    bool SphereReady = false;
+    bool GroundReady = false;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     private void Start()
     {
         _playerPos = GameObject.Find("Player").GetComponent<Transform>();
         _bossPos = GameObject.Find("BossThorn").GetComponent<Transform>();
         _nextPatern = 2;
+        BiteCool = 6;
+        SphereCool = 10;
+        GroundCool = 20;
+        HP = 100;
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.LeftControl) && _nextPatern == 0)
+        
+        if(CameraLimit.instance.nextMap == 3)
+        {
+            BiteCool -= Time.deltaTime;
+        if (BiteCool <= 0)
+        {
+            BiteReady = true;
+            BiteCool = 6;
+        }
+        SphereCool -= Time.deltaTime;
+        if (SphereCool <= 0)
+        {
+            SphereReady = true; 
+            SphereCool = 10;
+        }
+        GroundCool -= Time.deltaTime;
+        if (GroundCool <= 0)
+        {
+            GroundReady = true; 
+            GroundCool = 20;
+        }
+            DoSkill();
+        }
+        
+    }
+
+    void DoSkill()
+    {
+        if (_nextPatern == 0 && BiteReady == true)
         {
             StartCoroutine(CoTeeth());
+            BiteReady = false;
         }
-        if (Input.GetKeyDown(KeyCode.LeftControl) && _nextPatern == 1)
+        if (_nextPatern == 1 && SphereReady == true)
         {
             Sphere();
             Sphere();
+            SphereReady = false;
         }
-        if(Input.GetKeyDown(KeyCode.LeftControl) && _nextPatern == 2)
+        if (_nextPatern == 2 && GroundReady == true)
         {
             spearGround();
+            GroundReady = false;
         }
-
     }
 
 
@@ -57,7 +106,6 @@ public class BossPaternThorn : MonoBehaviour
         if (_count > 3)
         {
             _count = 0;
-            //_nextPatern = Random.Range(0, 3);
         }
 
         IEnumerator TeethEat()
@@ -99,7 +147,7 @@ public class BossPaternThorn : MonoBehaviour
 
     void spearGround()
     {
-        _dangerBox[2].gameObject.transform.position = new Vector3(_bossPos.position.x, _bossPos.position.y - 6f);
+        _dangerBox[2].gameObject.transform.position = new Vector3(_bossPos.position.x, _bossPos.position.y - 3f);
         GameObject temp2 = Instantiate(_dangerBox[2]);
         temp2.GetComponent<Animator>().Play("DangerBox");
         Destroy(temp2, 0.5f);

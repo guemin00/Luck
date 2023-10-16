@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IceCylinder : MonoBehaviour
+public class Thunder : MonoBehaviour
 {
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnParticleCollision(GameObject other)
     {
-        if(collision.collider.tag == "Player")
+        if (other.tag == "Player")
         {
             RollAndStats.instance.HP -= 5;
             Debug.Log(RollAndStats.instance.HP);

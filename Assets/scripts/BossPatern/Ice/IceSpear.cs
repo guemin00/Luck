@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class IceSpear : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if (collision.collider.tag == "Player")
+        {
+            RollAndStats.instance.HP -= 10;
+            Debug.Log(RollAndStats.instance.HP);
+        }
     }
 }
