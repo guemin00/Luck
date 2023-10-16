@@ -147,7 +147,7 @@ public class BossPaternThorn : MonoBehaviour
 
     void spearGround()
     {
-        _dangerBox[2].gameObject.transform.position = new Vector3(_bossPos.position.x, _bossPos.position.y - 3f);
+        _dangerBox[2].gameObject.transform.position = new Vector3(_bossPos.position.x, _bossPos.position.y- 3f);
         GameObject temp2 = Instantiate(_dangerBox[2]);
         temp2.GetComponent<Animator>().Play("DangerBox");
         Destroy(temp2, 0.5f);
@@ -162,7 +162,7 @@ public class BossPaternThorn : MonoBehaviour
 
     void InvokeSpear()
     {
-        _skills[2].gameObject.transform.position = new Vector3(_bossPos.position.x + i, _bossPos.position.y);
+        _skills[2].gameObject.transform.position = new Vector3(_bossPos.position.x + i, _bossPos.position.y +4f);
         GameObject temp = Instantiate(_skills[2]);
         temp.GetComponent<Animator>().Play("SphereGround");
         i++;

@@ -17,6 +17,14 @@ public class BossPaternIce : MonoBehaviour
     int _count = 0;
     int _nextPatern;
 
+    float CylinderCool = 30;
+    float ClystalCool = 20;
+    float spearCool = 5;
+
+    bool CylinderReady = false;
+    bool ClystalReady = false;
+    bool spearReady = false;
+
     private void Start()
     {
         _playerPos = GameObject.Find("Player").GetComponent<Transform>();
@@ -28,22 +36,49 @@ public class BossPaternIce : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Skills();   
+        if (CameraLimit.instance.nextMap == 2)
+        {
+            CylinderCool -= Time.deltaTime;
+            spearCool -= Time.deltaTime;
+            ClystalCool -= Time.deltaTime;
+            if (CylinderCool <= 0)
+            {
+                CylinderReady = true;
+                //CylinderCool = 15;
+            }
+            
+            if (spearCool <= 0)
+            {
+                spearReady = true;
+                //spearCool = 20;
+            }
+           
+            if (ClystalCool <= 0)
+            {
+                ClystalReady = true;
+                //ClystalCool = 10;
+            }
+            Skills();
+        }
+        
     }
 
     void Skills()
     {
-        if(Input.GetKeyDown(KeyCode.LeftControl) && _nextPatern ==0)
+        if(_nextPatern == 0 && CylinderReady == true)
         {
             IceCylinder();
+            CylinderReady = false; CylinderCool = 30;
         }
-        else if (Input.GetKeyDown(KeyCode.LeftControl) && _nextPatern == 1)
+        else if (_nextPatern == 1 && spearReady == true)
         {
             StartCoroutine(CoIceSpear());
+            spearReady = false; spearCool = 20;
         }
-        else if (Input.GetKeyDown(KeyCode.LeftControl) && _nextPatern == 2)
+        else if (_nextPatern == 2 && ClystalReady == true)
         {
             StartCoroutine(Coclystal());
+            ClystalReady = false; ClystalCool = 5;
         }
         
     }
@@ -77,6 +112,7 @@ public class BossPaternIce : MonoBehaviour
             Cylinder2.GetComponent<BoxCollider2D>().isTrigger = false;
             Destroy(Cylinder, 5f);
             Destroy(Cylinder2, 5f);
+
         }
     }
 
@@ -116,6 +152,7 @@ public class BossPaternIce : MonoBehaviour
         }
         while (_count < 5);
 
+
     }
 
     void IceClystal()
@@ -149,6 +186,7 @@ public class BossPaternIce : MonoBehaviour
             IceClystal();
             yield return new WaitForSeconds(0.5f);
         }
-        while (_count < 5); 
+        while (_count < 5);
+
     }
 }

@@ -10,8 +10,8 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] float _dashSpeed;
 
 
-    
 
+    bool _isJump = false;
     bool _isground = true;
     float _jumping = 0;
     public float _playerDmg;
@@ -21,19 +21,36 @@ public class PlayerMove : MonoBehaviour
 
     private void FixedUpdate()
     {
-        float x = Input.GetAxisRaw("Horizontal") * _speed;
-        _rig.velocity = new Vector2(x, _rig.velocity.y);
+        Move();
     }
     void Update()
     {
 
         jumpable();
-        // Dash();
-        
-
     }
 
+    void Move()
+    {
+        Vector3 movePosition = Vector3.zero;
 
+        if (Input.GetAxisRaw("Horizontal" )< 0)
+        {
+            movePosition = Vector3.left;
+            GetComponent<SpriteRenderer>().flipX = true;
+            gameObject.GetComponent<Animator>().Play("IsMove");
+        }
+        else if(Input.GetAxisRaw("Horizontal")  > 0)
+        {
+            movePosition = Vector3.right;
+            GetComponent<SpriteRenderer>().flipX = false;
+            gameObject.GetComponent<Animator>().Play("IsMove");
+        }
+        else
+        {
+            gameObject.GetComponent<Animator>().Play("Idle");
+        }
+        transform.position += movePosition * _speed * Time.deltaTime;
+    }
     
 
 
@@ -46,8 +63,13 @@ public class PlayerMove : MonoBehaviour
             if (_jumping > 1)
             {
                 _isground = false;
+                if (_isground == false)
+                {
+                    gameObject.GetComponent<Animator>().Play("IsJump");
+                }
                 _jumping = 0;
             }
+            
         }
     }
 
@@ -59,34 +81,5 @@ public class PlayerMove : MonoBehaviour
             _jumping = 0;
         }
     }
-
- 
-
-   
-
-
-
-    /*
-    void Dash()
-    {
-        
-        if(Input.GetMouseButtonDown(1)) 
-        {
-            _isDash = true;
-            _rig.gravityScale = 0f;
-            _rig.AddForce(Vector2.right* 40f, ForceMode2D.Impulse);
-            _dashCount--;
-            _coolTime = 5f;
-            if(_dashCount < 0)
-            {
-                _dashCount = 2;
-            }
-        }
-        _coolTime -= Time.deltaTime;
-    }
-
-    */
-
-
 }
     

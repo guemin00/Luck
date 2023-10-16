@@ -7,6 +7,7 @@ public class Portal : MonoBehaviour
     [SerializeField] GameObject[] _portal;
     [SerializeField] Transform[] _spawn;
     [SerializeField] GameObject _player;
+    [SerializeField] GameObject _GameOver;
 
     public int _rounds;
     bool _clear = true;
@@ -24,7 +25,31 @@ public class Portal : MonoBehaviour
         TeleSpear();
         TeleThunder();
         TeleTree();
+        if (RollAndStats.instance.HP <= 0)
+        {
+            Restart();
+        }
+
     }  
+
+    void Restart()
+    {
+        _GameOver.GetComponent<Animator>().Play("GameOverScene");
+        RollAndStats.instance.HP = 50;
+        RollAndStats.instance.AD = 5;
+        RollAndStats.instance.AS = 3;
+        StartCoroutine(ReHome());
+
+        IEnumerator ReHome()
+        {
+            
+            yield return new WaitForSeconds(5f);
+            CameraLimit.instance.nextMap = 0;
+            _player.transform.position = _portal[0].transform.position;
+            _GameOver.GetComponent<Animator>().Play("Restart");
+            
+        }
+    }
 
     void Teleport()
     {

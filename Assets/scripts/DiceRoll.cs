@@ -19,8 +19,6 @@ public class DiceRoll : MonoBehaviour
         //enemyControl = GetComponent<EnemyControl>();
         _diceEye = new List<int> { 1, 2, 3, 4, 5, 6 };
         //_enemyDiceEye = new List<int> {1,2,3,4,5,6 };
-        
-
     }
 
 

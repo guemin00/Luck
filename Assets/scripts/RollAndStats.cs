@@ -11,16 +11,22 @@ public class RollAndStats : MonoBehaviour
 
     public int _Dice;
     public Image _DiceImage;
+    public Image _DiceCool;
+    public Sprite[] _diceEyes;
     public Image _TypeImg;
     public Sprite[] _type;
     public List<int> _diceEye;
     int _point = 0;
     bool _RollReady = true;
-    int _chooseCount = 0;
+    int _chooseCount = 1;
 
-    int _Ad = 2;
+    int _Ad = 5;
     int _Hp = 50;
+    public Slider _Hpimg;
     float _As = 3;
+
+    float coolTimeMax= 10f;
+
 
     public int AD { get { return _Ad; } set { _Ad = value; } }
     public int HP { get { return _Hp; } set { _Hp = value; } }
@@ -44,10 +50,6 @@ public class RollAndStats : MonoBehaviour
         RollDice();
         Check();
         AddStat();
-        if(HP <= 0)
-        {
-            _player.SetActive(false);
-        }
     }
 
     void RollDice()
@@ -56,6 +58,7 @@ public class RollAndStats : MonoBehaviour
         {
             _RollReady = false;
             _Dice = _diceEye[Random.Range(0, _diceEye.Count)];
+            _DiceImage.sprite = _diceEyes[_Dice-1];
             _point = _Dice;
             Debug.Log(_point);
             StartCoroutine(CoolTime(10f));
@@ -63,10 +66,10 @@ public class RollAndStats : MonoBehaviour
 
         IEnumerator CoolTime(float cool)
         {
-            while (cool > 1.0f)
+            while (cool > 0.0f)
             {
-                cool -= Time.deltaTime;
-                _DiceImage.fillAmount = (1.0f /  cool);
+                cool-=Time.deltaTime;
+                _DiceImage.fillAmount = cool / coolTimeMax;
                 yield return new WaitForFixedUpdate();
             }
 
@@ -76,11 +79,11 @@ public class RollAndStats : MonoBehaviour
 
     void Check()
     {
+        Sprite Attack = _type[0];
+        Sprite Health = _type[1];
+        Sprite AttackSpd = _type[2];
         if (Input.GetMouseButtonDown(1))
         {
-            Sprite Attack = _type[0];
-            Sprite Health = _type[1];
-            Sprite AttackSpd = _type[2];
             _chooseCount++;
             if (_chooseCount == 1)
             {
@@ -91,14 +94,12 @@ public class RollAndStats : MonoBehaviour
             else if (_chooseCount == 2)
             {
                 _PointType = PointType.HP;
-                Destroy(Attack);
                 _TypeImg.sprite = Health;
                 Debug.Log(_PointType);
             }
-            else if (_chooseCount == 3)
+            else if (_chooseCount >= 3)
             {
                 _PointType = PointType.AS;
-                Destroy(Health); 
                 _TypeImg.sprite = AttackSpd;
                 Debug.Log(_PointType);
                 _chooseCount = 0;
